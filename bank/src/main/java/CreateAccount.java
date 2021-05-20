@@ -1,3 +1,5 @@
+
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -89,7 +91,8 @@ public class CreateAccount{
                     return;
                 }
                 user user = new user(nameT.getText(),surnameT.getText(),money);
-                System.out.println(user.money);
+                database dat=new database();
+                dat.addUser(user);
             }
         });
         button.setBounds(50,100,100,20);

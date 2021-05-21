@@ -1,30 +1,41 @@
-
-
 import com.mongodb.ConnectionString;
-import com.mongodb.client.MongoClients;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.MongoClientSettings;
 
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.types.ObjectId;
 
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.*;
 
 public class database {
 
-    ConnectionString connString = new ConnectionString(
-            "mongodb+srv://<admin>:<admin>@cluster0.ih9pj.mongodb.net/bank?retryWrites=true&w=majority"
-    );
-    MongoClientSettings settings = MongoClientSettings.builder()
-            .applyConnectionString(connString)
-            .retryWrites(true)
-            .build();
-    MongoClient mongoClient = MongoClients.create(settings);
-    MongoDatabase database = mongoClient.getDatabase("banking-java");
+
+    MongoCollection<user> userList = null;
+    MongoDatabase database = null;
+    MongoClient Client = null;
+
+    public database(){
+        Client = MongoClients.create(
+                "mongodb+srv://user:admin@banking.ih9pj.mongodb.net/bank-java?retryWrites=true&w=majority");
+        CodecRegistry pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+        database = Client.getDatabase("bank-java").withCodecRegistry(pojoCodecRegistry);
+    }
 
 
     public void addUser(user a){
-        MongoCollection<user> userList = database.getCollection("user",user.class);
+        userList = database.getCollection("User", user.class);
         userList.insertOne(a);
+
     }
 
 }

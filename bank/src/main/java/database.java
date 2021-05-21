@@ -26,15 +26,21 @@ public class database {
         database = Client.getDatabase("bank-java").withCodecRegistry(pojoCodecRegistry);
     }
 
+    public void getDatabase(){
+        if(userList==null){
+            userList = database.getCollection("User", User.class);
+        }
+    }
 
     public void addUser(User a){
-        userList = database.getCollection("User", User.class);
+        getDatabase();
         userList.insertOne(a);
         User temp=userList.find(eq("account_number",a.getAccount_number())).first();
         a.setId(temp.getId());
     }
 
     public boolean checkIfUserExist(String account_number){
+        getDatabase();
         User temp=userList.find(eq("account_number",account_number)).first();
         if(temp==null) return false;
         else return true;

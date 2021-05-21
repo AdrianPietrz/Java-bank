@@ -3,9 +3,10 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Semaphore;
 
 public class CreateAccount{
-
+    Semaphore sem=new Semaphore(0);
     private JLabel name;
     private JTextField nameT;
     private JLabel nameE;
@@ -33,12 +34,7 @@ public class CreateAccount{
 
     private JButton button;
     private User user=null;
-    public User Create(){
-
-        JFrame frame = new JFrame();
-        frame.setSize(500,500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    public User Create(JFrame frame){
         JPanel panel = new JPanel();
         frame.add(panel);
         panel.setLayout(null);
@@ -196,13 +192,20 @@ public class CreateAccount{
                 }
                 user = new User(nameT.getText(),surnameT.getText(),account_numberT.getText(),pinT.getText(),money);
                 dat.addUser(user);
-                frame.setVisible(false);
+                panel.setVisible(false);
+                sem.release();
             }
         });
         button.setBounds(50,170,100,20);
         panel.add(button);
 
-        frame.setVisible(true);
+
+        frame.repaint();
+        try{
+            sem.acquire();
+        }catch (Exception e){
+            System.out.println(e);
+        }
         return user;
     }
 

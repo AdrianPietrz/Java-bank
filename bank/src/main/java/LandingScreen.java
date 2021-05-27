@@ -10,29 +10,30 @@ public class LandingScreen {
         JPanel panel = new JPanel();
         frame.add(panel);
         panel.setLayout(null);
-        JLabel text=new JLabel();
-        text= new JLabel("Welcome to LoseYourMoney");
-        text.setBounds(100,10,400,100);
+        JLabel text;
+        text= new JLabel("MójBank");
+        text.setFont (text.getFont ().deriveFont (32.0f));
+        text.setBounds(165,50,400,100);
         panel.add(text);
 
-        JButton button=new JButton("Register");
+        JButton button=new JButton("Utwórz konto");
         button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
                 logIN=false;
                 sem.release();
                   }
         });
-        button.setBounds(50,170,100,20);
+        button.setBounds(50,170,150,40);
         panel.add(button);
 
-        JButton login=new JButton("Log In");
+        JButton login=new JButton("Zaloguj się");
         login.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
                 logIN=true;
                 sem.release();
             }
         });
-        login.setBounds(150,170,100,20);
+        login.setBounds(270,170,150,40);
         panel.add(login);
 
         try{
